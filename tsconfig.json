@@ -37,7 +37,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "notification.js"  ],
   "exclude": [
     "node_modules"
   ]
