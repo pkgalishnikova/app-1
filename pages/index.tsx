@@ -864,59 +864,86 @@ const Home: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { contract } = useContract("0xB23b3F8029a808b56a7b25EF16E50D37A35Da6DB");
 
+  // const checkPendingPayments = async () => {
+  //   if (!address) return;
+  //   setIsLoading(true);
+
+  //   try {
+  //     // Check webhook notifications first
+  //     const webhookResponse = await fetch(`/api/webhook?user=${address}`);
+  //     if (!webhookResponse.ok) {
+  //       throw new Error('Failed to fetch notifications');
+  //     }
+  //     const webhookData = await webhookResponse.json();
+
+  //     if (webhookData.notifications && webhookData.notifications.length > 0) {
+  //       const latestNotification = webhookData.notifications[0];
+  //       setPaymentDetails({
+  //         tokenId: latestNotification.data.tokenId,
+  //         contractId: latestNotification.data.contractId,
+  //         amount: latestNotification.data.amount,
+  //         status: latestNotification.data.status,
+  //         donations: latestNotification.data.donations
+  //       });
+  //       onOpen();
+  //       setIsLoading(false);
+  //       return;
+  //     }
+
+  //     // Fallback to contract check if no notifications
+  //     if (contract) {
+  //       const contracts = await contract.call("getAllContracts");
+  //       for (const contractId of contracts) {
+  //         const totalSupply = await contract.call("getTotalSupply", [contractId]);
+  //         for (let i = 0; i < totalSupply; i++) {
+  //           const { tokenId, owner } = await contract.call("getTokenIdByOwner", [i, contractId]);
+  //           if (owner.toLowerCase() === address.toLowerCase()) {
+  //             const url = await contract.call("returnURI", [tokenId, contractId]);
+  //             const res = await fetch(url);
+  //             const obj = await res.json();
+  //             const now = Math.floor(Date.now() / 1000);
+  //             const status = Number(obj.status);
+  //             if (status <= now) {
+  //               setPaymentDetails({
+  //                 tokenId: tokenId.toString(),
+  //                 contractId: contractId.toString(),
+  //                 amount: obj.pay,
+  //                 status: obj.status,
+  //                 donations: obj.donations
+  //               });
+  //               onOpen();
+  //               break;
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error checking payments:", error);
+  //     toast({
+  //       title: "Error",
+  //       description: "Failed to check subscription status",
+  //       status: "error",
+  //       duration: 5000,
+  //       isClosable: true,
+  //     });
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
   const checkPendingPayments = async () => {
     if (!address) return;
     setIsLoading(true);
 
     try {
-      // Check webhook notifications first
+      // Check webhook notifications
       const webhookResponse = await fetch(`/api/webhook?user=${address}`);
-      if (!webhookResponse.ok) {
-        throw new Error('Failed to fetch notifications');
-      }
+      if (!webhookResponse.ok) throw new Error('Failed to fetch notifications');
+
       const webhookData = await webhookResponse.json();
-
-      if (webhookData.notifications && webhookData.notifications.length > 0) {
-        const latestNotification = webhookData.notifications[0];
-        setPaymentDetails({
-          tokenId: latestNotification.data.tokenId,
-          contractId: latestNotification.data.contractId,
-          amount: latestNotification.data.amount,
-          status: latestNotification.data.status,
-          donations: latestNotification.data.donations
-        });
+      if (webhookData.notifications?.length > 0) {
+        setPaymentDetails(webhookData.notifications[0].data);
         onOpen();
-        setIsLoading(false);
-        return;
-      }
-
-      // Fallback to contract check if no notifications
-      if (contract) {
-        const contracts = await contract.call("getAllContracts");
-        for (const contractId of contracts) {
-          const totalSupply = await contract.call("getTotalSupply", [contractId]);
-          for (let i = 0; i < totalSupply; i++) {
-            const { tokenId, owner } = await contract.call("getTokenIdByOwner", [i, contractId]);
-            if (owner.toLowerCase() === address.toLowerCase()) {
-              const url = await contract.call("returnURI", [tokenId, contractId]);
-              const res = await fetch(url);
-              const obj = await res.json();
-              const now = Math.floor(Date.now() / 1000);
-              const status = Number(obj.status);
-              if (status <= now) {
-                setPaymentDetails({
-                  tokenId: tokenId.toString(),
-                  contractId: contractId.toString(),
-                  amount: obj.pay,
-                  status: obj.status,
-                  donations: obj.donations
-                });
-                onOpen();
-                break;
-              }
-            }
-          }
-        }
       }
     } catch (error) {
       console.error("Error checking payments:", error);

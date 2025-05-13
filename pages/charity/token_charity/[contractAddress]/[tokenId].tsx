@@ -78,88 +78,78 @@ const TokenPage = ({ nft, contractMetadata }: Props) => {
   };
 
   const handleDonate = async () => {
-    if (!nft.metadata?.pay || nft.metadata.pay === "0") {
-      toast({
-        title: "Invalid Donation Amount",
-        description: "This NFT doesn't have a valid donation amount set",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
+  if (!nft.metadata?.pay || nft.metadata.pay === "0") {
+    toast({
+      title: "Invalid Donation Amount",
+      description: "This NFT doesn't have a valid donation amount set",
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+    });
+    return;
+  }
+
+  setIsDonating(true);
+  try {
+    const donationAmount = ethers.BigNumber.from(nft.metadata.pay);
+    const tokenId = ethers.BigNumber.from(nft.metadata.id);
+    const charityId = 1;
+    const currentStatus = ethers.BigNumber.from(nft.metadata.status || "0");
+    const currentDonations = ethers.BigNumber.from(nft.metadata.sum || "0");
+
+    if (!appNFTCharity) {
+      throw new Error("Charity contract not connected");
     }
 
-    setIsDonating(true);
-    try {
-      // Convert all values to the exact format expected by the contract
-      const payAmount = typeof nft.metadata.pay === 'number'
-        ? nft.metadata.pay.toString()
-        : String(nft.metadata.pay);
-
-      // Now safely parse
-      const donationAmount = ethers.BigNumber.from(nft.metadata.pay);
-
-      // Rest of your donation logic...
-      const tokenId = ethers.BigNumber.from(nft.metadata.id);
-      const charityId = 1;
-      const currentStatus = ethers.BigNumber.from(nft.metadata.status || "0");
-      const currentDonations = ethers.BigNumber.from(nft.metadata.sum || "0");
-
-      // Verify contract is properly initialized
-      if (!appNFTCharity) {
-        throw new Error("Charity contract not connected");
-      }
-
-      // Execute the donation
-      const tx = await appNFTCharity?.call("transferFunds", [
+    // Use mutateAsync properly
+    const tx = await makeDonation({
+      args: [
         tokenId,
         charityId,
         currentStatus,
         currentDonations,
         donationAmount
-      ], {
+      ],
+      overrides: {
         value: donationAmount,
         gasLimit: 300000
-      });
-
-      // Wait for transaction confirmation
-      const receipt = await tx?.wait();
-
-      toast({
-        title: "Donation Successful!",
-        description: `Thank you for donating ${ethers.utils.formatEther(donationAmount)} ETH`,
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-
-      // Refresh the NFT data
-      router.replace(router.asPath);
-
-    } catch (error: any) {
-      console.error("Donation failed:", error);
-
-      // Improved error parsing
-      let errorMessage = "Transaction failed";
-      if (error.reason) {
-        errorMessage = error.reason;
-      } else if (error.data?.message) {
-        errorMessage = error.data.message;
-      } else if (error.message) {
-        errorMessage = error.message;
       }
+    });
 
-      toast({
-        title: "Donation Failed",
-        description: errorMessage,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    } finally {
-      setIsDonating(false);
+    await tx.receipt; // This is the correct way to wait for confirmation
+
+    toast({
+      title: "Donation Successful!",
+      description: `Thank you for donating ${ethers.utils.formatEther(donationAmount)} ETH`,
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
+
+    router.replace(router.asPath);
+
+  } catch (error: any) {
+    console.error("Donation failed:", error);
+    let errorMessage = "Transaction failed";
+    if (error.reason) {
+      errorMessage = error.reason;
+    } else if (error.data?.message) {
+      errorMessage = error.data.message;
+    } else if (error.message) {
+      errorMessage = error.message;
     }
-  };
+
+    toast({
+      title: "Donation Failed",
+      description: errorMessage,
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+    });
+  } finally {
+    setIsDonating(false);
+  }
+};
 
   const { data: auctionListing, isLoading: loadingAuction } =
     useValidEnglishAuctions(marketplace, {
