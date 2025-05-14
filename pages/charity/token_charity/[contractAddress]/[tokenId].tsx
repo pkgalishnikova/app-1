@@ -26,7 +26,6 @@ import {
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { SmartContract, NFT, ThirdwebSDK } from "@thirdweb-dev/sdk";
 import React, { useState } from "react";
-// import { CHARITY_NFT_COLLECTION_ADDRESS, MARKETPLACE_ADDRESS, APP_CHARITY_CONTRACT_ADDRESS } from "../../../../const/addresses";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 import { useRouter } from 'next/router';
@@ -38,7 +37,7 @@ type Props = {
   contractMetadata: any;
 };
 
-export const MARKETPLACE_ADDRESS = "0x1e90e9a7d04832E5E6e3002f6E459f9137E4e438";
+export const MARKETPLACE_ADDRESS = "0xe73486152961244Dbe5a96b032A999c37694F1b6";
 
 export const CHARITY_NFT_COLLECTION_ADDRESS = "0x7b26e3548499a14E462448155942EC845aD4354a"
 
@@ -51,6 +50,7 @@ const TokenPage = ({ nft, contractMetadata }: Props) => {
   const { contract: nftCollection } = useContract(CHARITY_NFT_COLLECTION_ADDRESS);
   const { contract: appNFTCharity } = useContract(APP_CHARITY_CONTRACT_ADDRESS);
   const [isDonating, setIsDonating] = useState(false);
+  // Тут коннектится с метамаском для доната с Thirdweb через useContractWrite
   const { mutateAsync: makeDonation } = useContractWrite(appNFTCharity, "transferFunds");
   const router = useRouter();
   const address = useAddress();
@@ -68,9 +68,7 @@ const TokenPage = ({ nft, contractMetadata }: Props) => {
   const formatDonationAmount = (value: string | number | undefined) => {
     if (!value) return "0";
     try {
-      // Convert to string first if it's a number
       const stringValue = typeof value === 'number' ? value.toString() : value;
-      // Format from Wei to ETH with 4 decimal places
       return parseFloat(ethers.utils.formatEther(stringValue)).toFixed(4);
     } catch {
       return "0";
@@ -101,7 +99,8 @@ const TokenPage = ({ nft, contractMetadata }: Props) => {
       throw new Error("Charity contract not connected");
     }
 
-    // Use mutateAsync properly
+// Вот тут платеж через await makeDonation
+
     const tx = await makeDonation({
       args: [
         tokenId,
@@ -417,13 +416,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const sdk = new ThirdwebSDK("sepolia");
 
   try {
-    // Type the contract as SmartContract
     const contract: SmartContract = await sdk.getContract(CHARITY_NFT_COLLECTION_ADDRESS);
 
-    // Type the NFT data
     const nft: NFT = await contract.erc721.get(tokenId);
 
-    // Type the metadata
     const contractMetadata = await contract.metadata.get() as {
       description?: string;
       image?: string;
@@ -452,7 +448,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const sdk = new ThirdwebSDK("sepolia");
   const contract: SmartContract = await sdk.getContract(CHARITY_NFT_COLLECTION_ADDRESS);
 
-  // Type the NFTs array
   const nfts: NFT[] = await contract.erc721.getAll();
 
   const paths = nfts.map((nft) => ({
