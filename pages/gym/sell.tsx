@@ -100,7 +100,7 @@ export default function Sell() {
                 <Box
                     as={motion.div}
                     variants={itemVariants}
-                    bg="whiteAlpha.800"
+                    bg="white"
                     backdropFilter="blur(10px)"
                     borderRadius="3xl"
                     p={8}
@@ -119,11 +119,8 @@ export default function Sell() {
                     ) : (
                         <Flex justifyContent={"center"} my={10}>
                             <Box
-                                borderWidth="1px"
-                                borderRadius="lg"
                                 overflow="hidden"
-                                p={5}
-                                w="75%">
+                               >
                                 <SimpleGrid columns={2} spacing={10} p={5}>
                                     <ThirdwebNftMedia
                                         metadata={selectedNFT.metadata}

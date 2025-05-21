@@ -33,7 +33,7 @@ const itemVariants = {
 };
 
 export default function Buy() {
-    
+
     const { contract } = useContract(GYM_NFT_COLLECTION_ADDRESS);
     const address = useAddress();
     const { data: nfts, isLoading } = useNFTs(contract);
@@ -68,35 +68,45 @@ export default function Buy() {
 
         const nftsWithPrices = nfts.map(nft => ({
             ...nft,
-            price: priceMap.get(nft.metadata.id) || 0
+            price: priceMap.get(nft.metadata.id) ?? null // use null for "not listed"
         }));
 
         let sorted;
         switch (sortOption) {
             case "priceLowHigh":
-                sorted = [...nftsWithPrices].sort((a, b) => a.price - b.price);
+                sorted = [...nftsWithPrices].sort((a, b) => {
+                    const priceA = a.price === null ? Infinity : a.price;
+                    const priceB = b.price === null ? Infinity : b.price;
+                    return priceA - priceB;
+                });
                 break;
             case "priceHighLow":
-                sorted = [...nftsWithPrices].sort((a, b) => b.price - a.price);
+                sorted = [...nftsWithPrices].sort((a, b) => {
+                    const priceA = a.price === null ? -Infinity : a.price;
+                    const priceB = b.price === null ? -Infinity : b.price;
+                    return priceB - priceA;
+                });
                 break;
             default:
-                sorted = nfts;
+                sorted = nftsWithPrices;
         }
+
         setSortedNFTs(sorted);
     }, [nfts, sortOption, directListings, auctionListings]);
 
+
     if (!address) {
-            return (
-                <Container maxW={"1200px"} p={5}>
-                    <Alert status="warning" borderRadius="md" mb={5}>
-                        <AlertIcon />
-                        You have to login or sign up to buy NFTs
-                    </Alert>
-                    <Text>Connect your wallet to view and sell your NFTs.</Text>
-    
-                </Container>
-            );
-        }
+        return (
+            <Container maxW={"1200px"} p={5}>
+                <Alert status="warning" borderRadius="md" mb={5}>
+                    <AlertIcon />
+                    You have to login or sign up to buy NFTs
+                </Alert>
+                <Text>Connect your wallet to view and sell your NFTs.</Text>
+
+            </Container>
+        );
+    }
 
     return (
         <Box
