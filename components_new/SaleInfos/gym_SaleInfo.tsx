@@ -35,7 +35,7 @@ export default function SaleInfo({ nft }: Props) {
 
     const { mutateAsync: createDirectListing } = useCreateDirectListing(marketplace);
 
-    const { mutateAsync: createAuctionListing } = useCreateAuctionListing(marketplace); 
+    const { mutateAsync: createAuctionListing } = useCreateAuctionListing(marketplace);
 
     async function checkAndProvideApproval() {
         const hasApproval = await nftCollection?.call(
@@ -70,7 +70,7 @@ export default function SaleInfo({ nft }: Props) {
         },
     });
 
-    async function handleSubmissionDirect( data: DirectFormData ) {
+    async function handleSubmissionDirect(data: DirectFormData) {
         await checkAndProvideApproval();
         const txResult = await createDirectListing({
             assetContractAddress: data.nftContractAddress,
@@ -94,7 +94,7 @@ export default function SaleInfo({ nft }: Props) {
         },
     });
 
-    async function handleSubmissionAuction( data: AuctionFormData ) {
+    async function handleSubmissionAuction(data: AuctionFormData) {
         await checkAndProvideApproval();
         const txResult = await createAuctionListing({
             assetContractAddress: data.nftContractAddress,
@@ -107,7 +107,8 @@ export default function SaleInfo({ nft }: Props) {
 
         return txResult;
     }
-    return(
+    return (
+        // <Box bg="white" position="relative">
         <Tabs>
             <TabList>
                 <Tab>Direct</Tab>
@@ -117,90 +118,91 @@ export default function SaleInfo({ nft }: Props) {
             <TabPanels>
                 <TabPanel>
                     <Stack spacing={8}>
-                    <Box>
-                        <Text>Listing starts on:</Text>
-                        <Input
-                        placeholder="Select Date and Time"
-                        size="md"
-                        type="datetime-local"
-                        {...registerDirect("startDate")}
-                    />
-                    <Text mt={2}>Listing end on:</Text>
-                    <Input
-                        placeholder="Select Date and Time"
-                        size="md"
-                        type="datetime-local"
-                        {...registerDirect("endDate")}
-                    />
-                    </Box>
-                    <Box>
-                        <Text fontWeight={"bold"}>Price:</Text>
-                        <Input
-                            placeholder="0"
-                            size="md"
-                            type="number"
-                            {...registerDirect("price")}
-                    />
-                    </Box>
-                    <Web3Button
-                        contractAddress={MARKETPLACE_ADDRESS}
-                        action={async () => {
-                            await handleSubmitDirect(handleSubmissionDirect)();
-                        }}
-                        onSuccess={(txResult) => {
-                            router.push(`/token/${GYM_NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`)
-                        }}
+                        <Box>
+                            <Text>Listing starts on:</Text>
+                            <Input
+                                placeholder="Select Date and Time"
+                                size="md"
+                                type="datetime-local"
+                                {...registerDirect("startDate")}
+                            />
+                            <Text mt={2}>Listing end on:</Text>
+                            <Input
+                                placeholder="Select Date and Time"
+                                size="md"
+                                type="datetime-local"
+                                {...registerDirect("endDate")}
+                            />
+                        </Box>
+                        <Box>
+                            <Text fontWeight={"bold"}>Price:</Text>
+                            <Input
+                                placeholder="0"
+                                size="md"
+                                type="number"
+                                {...registerDirect("price")}
+                            />
+                        </Box>
+                        <Web3Button
+                            contractAddress={MARKETPLACE_ADDRESS}
+                            action={async () => {
+                                await handleSubmitDirect(handleSubmissionDirect)();
+                            }}
+                            onSuccess={(txResult) => {
+                                router.push(`/token_gym/${MARKETPLACE_ADDRESS}/${nft.metadata.id}`)
+                            }}
                         >Create Direct Listing</Web3Button>
                     </Stack>
                 </TabPanel>
                 <TabPanel>
-                <Stack spacing={8}>
-                    <Box>
-                        <Text>Listing starts on:</Text>
-                        <Input
-                        placeholder="Select Date and Time"
-                        size="md"
-                        type="datetime-local"
-                        {...registerAuction("startDate")}
-                    />
-                    <Text mt={2}>Listing ends on:</Text>
-                        <Input
-                        placeholder="Select Date and Time"
-                        size="md"
-                        type="datetime-local"
-                        {...registerAuction("endDate")}
-                    />
-                    </Box>
-                    <Box>
-                        <Text fontWeight={"bold"}>Starting bid from:</Text>
-                        <Input
-                            placeholder="0"
-                            size="md"
-                            type="number"
-                            {...registerAuction("floorPrice")}
-                    />
-                    </Box>
-                    <Box>
-                        <Text fontWeight={"bold"}>Buyout price:</Text>
-                        <Input
-                            placeholder="0"
-                            size="md"
-                            type="number"
-                            {...registerAuction("buyoutPrice")}
-                    />
-                    </Box>
-                    <Web3Button
-                        contractAddress={MARKETPLACE_ADDRESS}
-                        action={async () => {
-                            await handleSubmitAuction(handleSubmissionAuction)();
-                        }}
-                        onSuccess={(txResult) => {
-                            router.push(`/token/${GYM_NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`)
-                        }}
+                    <Stack spacing={8}>
+                        <Box >
+                            <Text>Listing starts on:</Text>
+                            <Input
+                                placeholder="Select Date and Time"
+                                size="md"
+                                type="datetime-local"
+                                {...registerAuction("startDate")}
+                            />
+                            <Text mt={2}>Listing ends on:</Text>
+                            <Input
+                                placeholder="Select Date and Time"
+                                size="md"
+                                type="datetime-local"
+                                {...registerAuction("endDate")}
+                            />
+                        </Box>
+                        <Box>
+                            <Text fontWeight={"bold"}>Starting bid from:</Text>
+                            <Input
+                                placeholder="0"
+                                size="md"
+                                type="number"
+                                {...registerAuction("floorPrice")}
+                            />
+                        </Box>
+                        <Box>
+                            <Text fontWeight={"bold"}>Buyout price:</Text>
+                            <Input
+                                placeholder="0"
+                                size="md"
+                                type="number"
+                                {...registerAuction("buyoutPrice")}
+                            />
+                        </Box>
+                        <Web3Button
+                            contractAddress={MARKETPLACE_ADDRESS}
+                            action={async () => {
+                                await handleSubmitAuction(handleSubmissionAuction)();
+                            }}
+                            onSuccess={(txResult) => {
+                                router.push(`/token/${GYM_NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`)
+                            }}
                         >Create Auction Listing</Web3Button>
-                </Stack>
+                    </Stack>
                 </TabPanel>
             </TabPanels>
         </Tabs>
+
     )
 }

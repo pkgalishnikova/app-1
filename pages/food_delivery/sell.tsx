@@ -1,4 +1,4 @@
-import { Box, Button, Card, Container, Flex, Heading, SimpleGrid, Stack, Text, Alert, AlertIcon } from "@chakra-ui/react";
+import { Box, Button, Card, Container, Flex, Heading, SimpleGrid, Stack, Text, Alert, AlertIcon, VStack } from "@chakra-ui/react";
 import { ThirdwebNftMedia, useAddress, useContract, useOwnedNFTs } from "@thirdweb-dev/react";
 import React, { useState } from "react";
 import { FOOD_NFT_COLLECTION_ADDRESS } from "../../const/addresses";
@@ -6,6 +6,43 @@ import type { NFT as NFTType } from "@thirdweb-dev/sdk";
 import FoodNFTGrid from "../../components_new/NFTGrids/food_NFTGrid";
 import SaleInfo from "../../components_new/SaleInfos/food_SaleInfo";
 import Link from "next/link";
+import { motion } from 'framer-motion';
+import { keyframes } from '@emotion/react';
+
+const gradient = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.2,
+        },
+    },
+};
+
+const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+        y: 0,
+        opacity: 1,
+        transition: { duration: 0.5 },
+    },
+};
+
+const cardVariants = {
+    hidden: { scale: 0.9, opacity: 0 },
+    visible: {
+        scale: 1,
+        opacity: 1,
+        transition: { duration: 0.5 },
+    },
+};
+
 
 export default function Sell() {
     const { contract } = useContract(FOOD_NFT_COLLECTION_ADDRESS);
@@ -29,9 +66,48 @@ export default function Sell() {
     }
 
     return (
-        <Container maxW={"1200px"} p={5}>
-            <Heading>Sell NFTs</Heading>
-            <Text>Select which NFT to sell below.</Text>
+        <Box
+                    minH="100vh"
+                    bgGradient="linear(to-br, #0F4C75, #3282B8, #BBE1FA)"
+                    css={{
+                        backgroundSize: '400% 400%',
+                        animation: `${gradient} 15s ease infinite`,
+                    }}
+                    position="relative"
+                    pt="80px"
+                >
+                    <Container maxW="1400px" py={12} as={motion.div} variants={containerVariants} initial="hidden" animate="visible">
+                        <VStack spacing={6} textAlign="center" mb={12}>
+                            <Heading
+                                as={motion.h1}
+                                variants={itemVariants}
+                                fontSize={{ base: '4xl', md: '6xl' }}
+                                color="whiteAlpha.800"
+                                textShadow="0 4px 30px rgba(0,0,0,0.15)"
+                                fontWeight="extrabold"
+                            >
+                                Sell Your NFTs
+                            </Heading>
+                            <Text
+                                as={motion.p}
+                                variants={itemVariants}
+                                fontSize={{ base: 'lg', md: 'xl' }}
+                                color="whiteAlpha.800"
+                                maxW="600px"
+                            >
+                                Select which NFT you want to sell from your collection below.
+                            </Text>
+                        </VStack>
+                        <Box
+                            as={motion.div}
+                            variants={itemVariants}
+                            bg="white"
+                            backdropFilter="blur(10px)"
+                            borderRadius="3xl"
+                            p={8}
+                            border="1px solid"
+                            borderColor="whiteAlpha.300"
+                        >
             {!selectedNFT ? (
                 <FoodNFTGrid
                     data={data}
@@ -44,11 +120,7 @@ export default function Sell() {
             ) : (
                 <Flex justifyContent={"center"} my={10}>
                     <Box
-                        borderWidth="1px"
-                        borderRadius="lg"
-                        overflow="hidden"
-                        p={5}
-                        w="75%">
+                        overflow="hidden">
                         <SimpleGrid columns={2} spacing={10} p={5}>
                             <ThirdwebNftMedia
                                 metadata={selectedNFT.metadata}
@@ -72,6 +144,8 @@ export default function Sell() {
                     </Box>
                 </Flex>
             )}
+            </Box>
         </Container>
+        </Box>
     )
 }
