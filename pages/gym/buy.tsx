@@ -68,7 +68,7 @@ export default function Buy() {
 
         const nftsWithPrices = nfts.map(nft => ({
             ...nft,
-            price: priceMap.get(nft.metadata.id) ?? null // use null for "not listed"
+            price: priceMap.get(nft.metadata.id) ?? null
         }));
 
         let sorted;

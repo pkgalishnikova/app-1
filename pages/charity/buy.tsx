@@ -58,7 +58,7 @@ const containerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.3,
-      duration: 0.6, // Перенесено сюда
+      duration: 0.6,
       ease: "easeOut"
     },
   },
@@ -90,48 +90,6 @@ const CharityBuyPage = () => {
     charityCollection,
     address
   );
-
-  // const mintNFTWithMetadata = async () => {
-  //   if (!signer) {
-  //     alert("Please connect your wallet first.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const contract = new ethers.Contract(
-  //       CHARITY_NFT_COLLECTION_ADDRESS,
-  //       charityNFTAbi,
-  //       signer
-  //     );
-
-  //     const amountInWei = ethers.utils.parseEther(paymentAmount);
-
-  //     const tx = await contract.mint(amountInWei);
-  //     console.log("Transaction sent:", tx.hash);
-  //     await tx.wait();
-  //     console.log("Mint confirmed!");
-
-  //     toast({
-  //       title: "Mint Successful!",
-  //       description: "Your Charity NFT has been minted with weekly donation amount set.",
-  //       status: "success",
-  //       duration: 5000,
-  //       isClosable: true,
-  //     });
-
-  //     setIsMintingModalOpen(false);
-  //     setPaymentAmount("");
-  //   } catch (err) {
-  //     console.error("Mint failed:", err);
-  //     toast({
-  //       title: "Mint Failed",
-  //       description: err instanceof Error ? err.message : "Transaction failed",
-  //       status: "error",
-  //       duration: 5000,
-  //       isClosable: true,
-  //     });
-  //   }
-  // };
 
   const mintNFTWithMetadata = async () => {
     if (!signer) {

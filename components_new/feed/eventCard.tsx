@@ -15,7 +15,6 @@ export default function EventCard(props: EventCardProps) {
   return (
       <div className={styles.card} style={{ backgroundColor: "#ededed", color: "white", maxWidth: '1400px', marginRight: "2rem"}}>
           <div className={styles.cardText} style={{ color: "black" }}>
-              {/* Use inline styles for flexbox layout */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <Link href={`account/${props.walletAddress}`} className="title">
                       <p className={styles.connectedAddress}>{truncateAddress(props.walletAddress)}</p>

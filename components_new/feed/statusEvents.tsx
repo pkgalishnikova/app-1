@@ -3,12 +3,11 @@ import { useContract, useContractEvents } from "@thirdweb-dev/react";
 import { STATUS_CONTRACT_ADDRESS } from "../../const/addresses";
 import EventCard from "./eventCard";
 import styles from "../../styles/Home.module.css";
-// import loadingLottie from "./public/loadingLottie.json";
 import { useEffect, useState } from "react";
 
 export default function StatusEvents() {
     const [isLoading, setIsLoading] = useState(true);
-    const [visibleEvents, setVisibleEvents] = useState(3); // Start with 6 events visible
+    const [visibleEvents, setVisibleEvents] = useState(3); 
 
     const {
         contract

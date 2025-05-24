@@ -43,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             amount: payload.pay || payload.amount,
             tokenId: payload.token_id || payload.tokenId,
             contractId: payload.contract_id || payload.contractId,
-            status: payload.status || "1", // Default to active
+            status: payload.status || "1",
             donations: payload.donations || "0",
             name: `Charity NFT #${payload.token_id || payload.tokenId}`
           },
@@ -72,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const now = Math.floor(Date.now() / 1000);
     const userNotifications = notifications.filter(
       n => n.user.toLowerCase() === user.toString().toLowerCase() && 
-           Number(n.data.status) <= now // Only show if payment is due
+           Number(n.data.status) <= now
     );
 
     return res.status(200).json({ notifications: userNotifications });

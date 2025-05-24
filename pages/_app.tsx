@@ -37,7 +37,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       
       <ChakraProvider>
         <Navbar />
-        {/* <Sidebar pageWrapId={"page-wrap"} outerContainerId={"outer-container"} /> */}
         <Component {...pageProps} />
         <BottomBar />
       </ChakraProvider>

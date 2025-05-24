@@ -67,19 +67,17 @@ export default function AcountFeed() {
         }
     );
 
-    const [postNum, setPostNum] = useState(3); // Default number of posts dislplayed
+    const [postNum, setPostNum] = useState(3);
 
     function handleClick() {
-        setPostNum(prevPostNum => prevPostNum + 3) // 3 is the number of posts you want to load per click
+        setPostNum(prevPostNum => prevPostNum + 3)
     }
 
     useEffect(() => {
-        // Set a timeout for 2 seconds
         const timer = setTimeout(() => {
             setIsLoading(false);
         }, 5000);
 
-        // Cleanup the timer when the component is unmounted
         return () => clearTimeout(timer);
     }, []);
 
@@ -87,7 +85,7 @@ export default function AcountFeed() {
         ? [...userEvents].sort((a, b) => {
             const timestampA = Number(a.data.timestamp);
             const timestampB = Number(b.data.timestamp);
-            return timestampB - timestampA; // Newest first
+            return timestampB - timestampA;
         })
         : null;
 

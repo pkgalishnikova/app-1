@@ -50,7 +50,6 @@ const TokenPage = ({ nft, contractMetadata }: Props) => {
   const { contract: nftCollection } = useContract(CHARITY_NFT_COLLECTION_ADDRESS);
   const { contract: appNFTCharity } = useContract(APP_CHARITY_CONTRACT_ADDRESS);
   const [isDonating, setIsDonating] = useState(false);
-  // Тут коннектится с метамаском для доната с Thirdweb через useContractWrite
   const { mutateAsync: makeDonation } = useContractWrite(appNFTCharity, "transferFunds");
   const router = useRouter();
   const address = useAddress();
@@ -99,8 +98,6 @@ const TokenPage = ({ nft, contractMetadata }: Props) => {
       throw new Error("Charity contract not connected");
     }
 
-// Вот тут платеж через await makeDonation
-
     const tx = await makeDonation({
       args: [
         tokenId,
@@ -115,7 +112,7 @@ const TokenPage = ({ nft, contractMetadata }: Props) => {
       }
     });
 
-    await tx.receipt; // This is the correct way to wait for confirmation
+    await tx.receipt;
 
     toast({
       title: "Donation Successful!",
@@ -210,7 +207,6 @@ const TokenPage = ({ nft, contractMetadata }: Props) => {
     }
   }, [address, nft.metadata.id]);
 
-  // In your TokenPage component, update the toggleFavorite function:
   const toggleFavorite = () => {
     if (!address) return;
 
@@ -254,23 +250,19 @@ const TokenPage = ({ nft, contractMetadata }: Props) => {
               <Text>{nft.metadata.description}</Text>
             </Box>
 
-            <Box p={3}>
-              <Text fontSize="sm">Weekly Donation: ${ethers.utils.formatEther(String(nft.metadata?.pay || "0"))} ETH</Text>
-              <Text fontSize="sm">Total Donated: ${ethers.utils.formatEther(String(nft.metadata?.sum || "0"))} ETH </Text>
-            </Box>
-
             <Box>
               <Text fontWeight={"bold"}>Status:</Text>
               <Badge colorScheme={statusColor}>{statusText}</Badge>
             </Box>
 
             <Box>
-              <Text fontWeight={"bold"}>Amount Donated:</Text>
-              <Text>
-                {typeof nft.metadata?.sum === "string" || typeof nft.metadata?.sum === "number"
-                  ? nft.metadata.sum
-                  : "0"} wei
-              </Text>
+              <Text fontWeight={"bold"}>Daily Donation:</Text>
+              <Text> {ethers.utils.formatEther(String(nft.metadata?.pay || "0"))} ETH</Text>
+            </Box>
+
+            <Box>
+              <Text fontWeight={"bold"}>Total Donated:</Text>
+              <Text>{ethers.utils.formatEther(String(nft.metadata?.sum || "0"))} ETH </Text>
             </Box>
 
             <Box>
@@ -311,7 +303,6 @@ const TokenPage = ({ nft, contractMetadata }: Props) => {
         </Stack>
 
         <Stack spacing={"20px"}>
-          {/* Back Button */}
           <Box>
             <Button onClick={() => router.back()} colorScheme="gray" size="sm">
               ← Back
@@ -378,38 +369,6 @@ const TokenPage = ({ nft, contractMetadata }: Props) => {
     </Container>
   );
 }
-
-// export const getStaticProps: GetStaticProps = async (context) => {
-//   const tokenId = context.params?.tokenId as string;
-//   const sdk = new ThirdwebSDK("sepolia");
-
-//   let nft = null;
-//   let contractMetadata = null;
-
-//   try {
-//     const contract = await sdk.getContract(CHARITY_NFT_COLLECTION_ADDRESS);
-//     nft = await contract.erc721.get(tokenId);
-
-//     contractMetadata = await contract.metadata.get();
-//     contractMetadata = {
-//       ...contractMetadata,
-//       description: contractMetadata.description ?? "No description available",
-//       image: contractMetadata.image ?? null,
-//       name: contractMetadata.name ?? "Unnamed Collection",
-//     };
-//   } catch (e) {
-//     console.error("Error fetching NFT or metadata:", e);
-//   }
-
-//   return {
-//     props: {
-//       nft,
-//       contractMetadata,
-//     },
-//     revalidate: 1,
-//   };
-// };
-
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const tokenId = context.params?.tokenId as string;

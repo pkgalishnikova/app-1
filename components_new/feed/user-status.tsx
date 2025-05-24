@@ -47,7 +47,7 @@ export default function UserStatus() {
         <button style={{ background: 'green', borderRadius: '8px', color: 'white', padding: '0.5rem 1rem', border: 'none', cursor: 'pointer', marginTop: '1rem', marginBottom: '0rem' }} onClick={() => setIsStatusModalOpen(true)}>Update</button>
 
         {isStatusModalOpen && (
-          <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ borderRadius: "24px", position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', width: '400px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <p>New Status:</p>
@@ -77,76 +77,6 @@ export default function UserStatus() {
           </div>
         )}
 
-        {/* {isStatusModalOpen && (
-          <Box
-            bg="white"
-            p={6}
-            borderRadius="lg"
-            boxShadow="lg"
-            border="1px solid"
-            borderColor="gray.200"
-            width="100%"
-            maxW="500px"
-            mx="auto"
-            mt={4}
-          >
-            <Flex justify="space-between" align="center" mb={4}>
-              <Text fontWeight="bold">New Status:</Text>
-              <Box
-                as="button"
-                onClick={() => setIsStatusModalOpen(false)}
-                fontSize="xl"
-                lineHeight="1"
-                border="none"
-                background="transparent"
-                cursor="pointer"
-              >
-                ×
-              </Box>
-            </Flex>
-
-            <Box mb={4}>
-              <textarea
-                value={newStatus}
-                onChange={(e) => {
-                  setNewStatus(e.target.value);
-                  setCharacterCount(e.target.value.length);
-                }}
-                placeholder="Enter your status"
-                style={{
-                  width: "100%",
-                  height: "100px",
-                  padding: "0.5rem",
-                  borderRadius: "8px",
-                  border: "1px solid #CBD5E0",
-                }}
-              />
-              <Text fontSize="sm" textAlign="right" mt={1}>
-                {characterCount}/140
-              </Text>
-            </Box>
-
-            <Web3Button
-              style={{
-                background: "green",
-                color: "white",
-                padding: "0.5rem 1rem",
-                border: "none",
-                borderRadius: "6px",
-                cursor: "pointer",
-              }}
-              contractAddress={STATUS_CONTRACT_ADDRESS}
-              action={(contract) => contract.call("setStatus", [newStatus])}
-              isDisabled={characterCount === 0 || characterCount > 140}
-              onSuccess={() => {
-                setIsStatusModalOpen(false);
-                setNewStatus("");
-              }}
-            >
-              Update Status
-            </Web3Button>
-          </Box>
-        )} */}
       </div>
     </main>
   );

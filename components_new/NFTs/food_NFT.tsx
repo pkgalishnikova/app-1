@@ -19,13 +19,13 @@ export default function FoodNFTComponent({ nft, contractAddress, onClick }: Prop
     
         const { data: directListing, isLoading: loadingDirectListing } =
             useValidDirectListings(marketplace, {
-                tokenContract: contractAddress, // Use passed contract address
+                tokenContract: contractAddress,
                 tokenId: nft.metadata.id,
             });
     
         const { data: auctionListing, isLoading: loadingAuction } =
             useValidEnglishAuctions(marketplace, {
-                tokenContract: contractAddress, // Use passed contract address
+                tokenContract: contractAddress,
                 tokenId: nft.metadata.id,
             });
     
