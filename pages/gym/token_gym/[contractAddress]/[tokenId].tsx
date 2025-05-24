@@ -38,7 +38,6 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
         }
     }, [address, nft.metadata.id]);
 
-    // In your TokenPage component, update the toggleFavorite function:
     const toggleFavorite = () => {
         if (!address) return;
 
@@ -277,7 +276,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     try {
         const contract = await sdk.getContract(GYM_NFT_COLLECTION_ADDRESS);
 
-        // If contract is undeployed, this will fail
         const [nft, metadata] = await Promise.all([
             contract.erc721.get(tokenId),
             contract.metadata.get().catch(() => null),
@@ -302,26 +300,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
 };
 
-
-// export const getStaticPaths: GetStaticPaths = async () => {
-//     const sdk = new ThirdwebSDK("sepolia");
-//     const contract = await sdk.getContract(GYM_NFT_COLLECTION_ADDRESS);
-
-//     // Only fetch the first 50 NFTs for static generation
-//     const nfts = await contract.erc721.getAll({ count: 50 });
-
-//     const paths = nfts.map((nft) => ({
-//         params: {
-//             contractAddress: GYM_NFT_COLLECTION_ADDRESS,
-//             tokenId: nft.metadata.id.toString(),
-//         },
-//     }));
-
-//     return {
-//         paths,
-//         fallback: 'blocking', // Keep this for new NFTs
-//     };
-// };
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const sdk = new ThirdwebSDK("sepolia");

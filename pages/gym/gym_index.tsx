@@ -28,7 +28,7 @@ const containerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.3,
-      duration: 0.6, // Перенесено сюда
+      duration: 0.6,
       ease: "easeOut"
     },
   },
@@ -90,7 +90,6 @@ const Home: NextPage = () => {
             fontSize={{ base: '4xl', md: '6xl' }}
             color="whiteAlpha.800"
             textShadow="0 4px 30px rgba(0,0,0,0.15)"
-            // bgClip="text"
             fontWeight="extrabold"
             lineHeight="1.2"
           >

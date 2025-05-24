@@ -38,7 +38,6 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
             }
         }, [address, nft.metadata.id]);
     
-        // In your TokenPage component, update the toggleFavorite function:
         const toggleFavorite = () => {
             if (!address) return;
         
@@ -266,7 +265,6 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
 export const getStaticProps: GetStaticProps = async (context) => {
     const tokenId = context.params?.tokenId as string;
     
-    // Initialize SDK with proper error handling
     let sdk;
     try {
       sdk = new ThirdwebSDK("sepolia");
@@ -279,7 +277,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       const contract = await sdk.getContract(FOOD_NFT_COLLECTION_ADDRESS);
       const [nft, metadata] = await Promise.all([
         contract.erc721.get(tokenId),
-        contract.metadata.get().catch(() => null), // Graceful fallback
+        contract.metadata.get().catch(() => null),
       ]);
   
       if (!nft) return { notFound: true };
@@ -293,7 +291,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
             name: metadata?.name || "Unnamed Collection",
           },
         },
-        revalidate: 60, // Consider increasing revalidate time
+        revalidate: 60,
       };
     } catch (e) {
       console.error("Error fetching NFT data:", e);
@@ -305,7 +303,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const sdk = new ThirdwebSDK("sepolia");
     const contract = await sdk.getContract(FOOD_NFT_COLLECTION_ADDRESS);
     
-    // Only fetch the first 50 NFTs for static generation
     const nfts = await contract.erc721.getAll({ count: 50 });
     
     const paths = nfts.map((nft) => ({
@@ -317,6 +314,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
   
     return {
       paths,
-      fallback: 'blocking', // Keep this for new NFTs
+      fallback: 'blocking',
     };
   };

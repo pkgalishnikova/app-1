@@ -16,21 +16,19 @@
   background: -webkit-linear-gradient(#a79af9, #7aa8d2);
   -webkit-background-clip: text;
   background-clip: text;
-  /* -webkit-text-fill-color: transparent; */
+
 }
 
 .gradientText2 {
   background: -webkit-linear-gradient(#bfa3da, #743f93);
   -webkit-background-clip: text;
   background-clip: text;
-  /* -webkit-text-fill-color: transparent; */
 }
 
 .gradientText3 {
   background: -webkit-linear-gradient(#c35ab1, #e9a8d9);
   -webkit-background-clip: text;
   background-clip: text;
-  /* -webkit-text-fill-color: transparent; */
 }
 
 .title a:hover,

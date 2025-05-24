@@ -28,7 +28,7 @@ const containerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.3,
-      duration: 0.6, // Перенесено сюда
+      duration: 0.6,
       ease: "easeOut"
     },
   },
