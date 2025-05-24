@@ -149,7 +149,7 @@ export default function SaleInfo({ nft }: Props) {
                                 await handleSubmitDirect(handleSubmissionDirect)();
                             }}
                             onSuccess={(txResult) => {
-                                console.log("Listing created successfully", txResult);
+                                router.push(`/token_gym/${MARKETPLACE_ADDRESS}/${nft.metadata.id}`)
                             }}
                         >Create Direct Listing</Web3Button>
                     </Stack>
@@ -196,7 +196,7 @@ export default function SaleInfo({ nft }: Props) {
                                 await handleSubmitAuction(handleSubmissionAuction)();
                             }}
                             onSuccess={(txResult) => {
-                                console.log("Listing created successfully", txResult);
+                                router.push(`/token/${GYM_NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`)
                             }}
                         >Create Auction Listing</Web3Button>
                     </Stack>
