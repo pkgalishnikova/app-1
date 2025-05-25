@@ -4,7 +4,7 @@ const nextConfig = {
     config.externals.push("pino-pretty", "lokijs", "encoding");
     return config;
   },
-  staticPageGenerationTimeout: 300,
+  staticPageGenerationTimeout: 1200,
 };
 
 export default nextConfig;

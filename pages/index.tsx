@@ -225,7 +225,7 @@ const Home: NextPage = () => {
           <ModalHeader>Charity Donation Reminder</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text mb={4}>It's time to make your weekly donation for your Charity NFT:</Text>
+            <Text mb={4}>It's time to make your daily donation for your Charity NFT:</Text>
             <Box mt={4} p={4} bg="gray.100" borderRadius="md">
               {paymentDetails ? (
                 <Stack spacing={3}>

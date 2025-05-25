@@ -41,7 +41,7 @@ export const MARKETPLACE_ADDRESS = "0xe73486152961244Dbe5a96b032A999c37694F1b6";
 
 export const CHARITY_NFT_COLLECTION_ADDRESS = "0x7b26e3548499a14E462448155942EC845aD4354a"
 
-export const APP_CHARITY_CONTRACT_ADDRESS = "0xB23b3F8029a808b56a7b25EF16E50D37A35Da6DB" 
+export const APP_CHARITY_CONTRACT_ADDRESS = "0xB23b3F8029a808b56a7b25EF16E50D37A35Da6DB"
 
 const TokenPage = ({ nft, contractMetadata }: Props) => {
   const { contract: marketplace, isLoading: loadingMarketplace } =
@@ -75,77 +75,77 @@ const TokenPage = ({ nft, contractMetadata }: Props) => {
   };
 
   const handleDonate = async () => {
-  if (!nft.metadata?.pay || nft.metadata.pay === "0") {
-    toast({
-      title: "Invalid Donation Amount",
-      description: "This NFT doesn't have a valid donation amount set",
-      status: "error",
-      duration: 5000,
-      isClosable: true,
-    });
-    return;
-  }
-
-  setIsDonating(true);
-  try {
-    const donationAmount = ethers.BigNumber.from(nft.metadata.pay);
-    const tokenId = ethers.BigNumber.from(nft.metadata.id);
-    const charityId = 1;
-    const currentStatus = ethers.BigNumber.from(nft.metadata.status || "0");
-    const currentDonations = ethers.BigNumber.from(nft.metadata.sum || "0");
-
-    if (!appNFTCharity) {
-      throw new Error("Charity contract not connected");
+    if (!nft.metadata?.pay || nft.metadata.pay === "0") {
+      toast({
+        title: "Invalid Donation Amount",
+        description: "This NFT doesn't have a valid donation amount set",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
     }
 
-    const tx = await makeDonation({
-      args: [
-        tokenId,
-        charityId,
-        currentStatus,
-        currentDonations,
-        donationAmount
-      ],
-      overrides: {
-        value: donationAmount,
-        gasLimit: 300000
+    setIsDonating(true);
+    try {
+      const donationAmount = ethers.BigNumber.from(nft.metadata.pay);
+      const tokenId = ethers.BigNumber.from(nft.metadata.id);
+      const charityId = 1;
+      const currentStatus = ethers.BigNumber.from(nft.metadata.status || "0");
+      const currentDonations = ethers.BigNumber.from(nft.metadata.sum || "0");
+
+      if (!appNFTCharity) {
+        throw new Error("Charity contract not connected");
       }
-    });
 
-    await tx.receipt;
+      const tx = await makeDonation({
+        args: [
+          tokenId,
+          charityId,
+          currentStatus,
+          currentDonations,
+          donationAmount
+        ],
+        overrides: {
+          value: donationAmount,
+          gasLimit: 300000
+        }
+      });
 
-    toast({
-      title: "Donation Successful!",
-      description: `Thank you for donating ${ethers.utils.formatEther(donationAmount)} ETH`,
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-    });
+      await tx.receipt;
 
-    router.replace(router.asPath);
+      toast({
+        title: "Donation Successful!",
+        description: `Thank you for donating ${ethers.utils.formatEther(donationAmount)} ETH`,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
 
-  } catch (error: any) {
-    console.error("Donation failed:", error);
-    let errorMessage = "Transaction failed";
-    if (error.reason) {
-      errorMessage = error.reason;
-    } else if (error.data?.message) {
-      errorMessage = error.data.message;
-    } else if (error.message) {
-      errorMessage = error.message;
+      router.replace(router.asPath);
+
+    } catch (error: any) {
+      console.error("Donation failed:", error);
+      let errorMessage = "Transaction failed";
+      if (error.reason) {
+        errorMessage = error.reason;
+      } else if (error.data?.message) {
+        errorMessage = error.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      toast({
+        title: "Donation Failed",
+        description: errorMessage,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsDonating(false);
     }
-
-    toast({
-      title: "Donation Failed",
-      description: errorMessage,
-      status: "error",
-      duration: 5000,
-      isClosable: true,
-    });
-  } finally {
-    setIsDonating(false);
-  }
-};
+  };
 
   const { data: auctionListing, isLoading: loadingAuction } =
     useValidEnglishAuctions(marketplace, {
