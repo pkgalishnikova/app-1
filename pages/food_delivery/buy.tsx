@@ -83,19 +83,19 @@ export default function Buy() {
         setSortedNFTs(sorted);
     }, [nfts, sortOption, directListings, auctionListings]);
 
-    const address = useAddress();
+        const address = useAddress();
     if (!address) {
-        return (
-            <Container maxW={"1200px"} p={5}>
-                <Alert status="warning" borderRadius="md" mb={5}>
-                    <AlertIcon />
-                    You have to login or sign up to buy NFTs
-                </Alert>
-                <Text>Connect your wallet to view and sell your NFTs.</Text>
-
-            </Container>
-        );
-    }
+            return (
+                <Container maxW={"1200px"} p={5}>
+                    <Alert status="warning" borderRadius="md" mb={5}>
+                        <AlertIcon />
+                        You have to login or sign up to buy NFTs
+                    </Alert>
+                    <Text>Connect your wallet to view and sell your NFTs.</Text>
+    
+                </Container>
+            );
+        }
 
     return (
         <Box
