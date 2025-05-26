@@ -113,7 +113,7 @@ const CharityBuyPage = () => {
 
       toast({
         title: "Mint Successful!",
-        description: "Your Charity NFT has been minted with weekly donation amount set.",
+        description: "Your Charity NFT has been minted with daily donation amount set.",
         status: "success",
         duration: 5000,
         isClosable: true,
