@@ -20,8 +20,8 @@ export default function CharityNFTGrid({
 }: Props) {
     const address = useAddress();
     if (!address) {
-                    return <Text>Connect your wallet to view collection.</Text>;
-                }
+        return <Text>Connect your wallet to view collection.</Text>;
+    }
     return (
         <SimpleGrid columns={4} spacing={6} w={"100%"} padding={2.5} my={5}>
             {isLoading ? (
